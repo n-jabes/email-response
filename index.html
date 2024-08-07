@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Processing Your Request</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Poppins', sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -17,12 +19,18 @@
       .container {
         text-align: center;
         padding: 20px;
-        background-color: white;
+        background-color: #ffffff;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       #message {
         margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
       #spinner {
         border: 4px solid #f3f3f3;
@@ -34,15 +42,25 @@
         margin: 0 auto;
       }
       @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
       .hidden {
         display: none;
+      }
+      .success {
+        color: #28a745;
+      }
+      .error {
+        color: #dc3545;
+      }
+      .success-icon {
+        color: #28a745;
+        font-size: 24px;
+      }
+      .error-icon {
+        color: #dc3545;
+        font-size: 24px;
       }
     </style>
     <script>
@@ -51,7 +69,6 @@
         const params = new URLSearchParams(window.location.search);
         return {
           userIds: params.get('userIds'),
-          // ids: params.get('ids'),
           action: params.get('action'),
         };
       }
@@ -59,32 +76,24 @@
       // Function to handle AJAX requests
       async function handleResponse(action) {
         const { userIds } = getQueryParams();
-        const url =
-          action === 'approve'
-            ? `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(
-                userIds
-              )}`
-            : `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(
-                userIds
-              )}`;
+        const url = action === 'approve'
+          ? `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(userIds)}`
+          : `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(userIds)}`;
 
         try {
-          const response = await fetch(url, { method: 'PUT' });
+          const response = await fetch(url, { method: 'GET' });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
-          document.getElementById(
-            'message'
-          ).textContent = `Guests ${action}d successfully`;
-          document.getElementById('spinner').classList.add('hidden');
+          document.getElementById('message').innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests ${action}d successfully`;
+          document.getElementById('message').className = 'success';
         } catch (error) {
-          document.getElementById(
-            'message'
-          ).textContent = `There was a problem with the ${action} request`;
-          document.getElementById('spinner').classList.add('hidden');
+          document.getElementById('message').innerHTML = `<i class="fas fa-times-circle error-icon"></i> There was a problem with the ${action} request`;
+          document.getElementById('message').className = 'error';
           console.error('Error:', error);
         }
+        document.getElementById('spinner').classList.add('hidden');
       }
 
       // Run on page load
@@ -93,7 +102,8 @@
         if (action) {
           handleResponse(action);
         } else {
-          document.getElementById('message').textContent = 'Invalid request';
+          document.getElementById('message').innerHTML = `<i class="fas fa-times-circle error-icon"></i> Invalid request`;
+          document.getElementById('message').className = 'error';
           document.getElementById('spinner').classList.add('hidden');
         }
       };
@@ -101,7 +111,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Processing your request</h1>
+      <h1>Processing Your Request</h1>
       <p id="message">Processing your request...</p>
       <div id="spinner"></div>
     </div>

@@ -47,7 +47,7 @@
       const params = new URLSearchParams(window.location.search);
       return {
         userIds: params.get('userIds'),
-        ids: params.get('ids'),
+        // ids: params.get('ids'),
         action: params.get('action')
       };
     }
@@ -56,8 +56,8 @@
     async function handleResponse(action) {
       const { userIds, ids } = getQueryParams();
       const url = action === 'approve' 
-        ? `https://your-api-url.com/users/approve-guests?userIds=${encodeURIComponent(userIds)}`
-        : `https://your-api-url.com/users/updateStatus-batch/decline?ids=${encodeURIComponent(ids)}`;
+        ? `https://pcap-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(userIds)}`
+        : `https://pcap-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(userIds)}`;
       
       try {
         const response = await fetch(url, { method: 'PUT' });
@@ -68,7 +68,7 @@
         document.getElementById('message').textContent = `Guests ${action}d successfully`;
         document.getElementById('spinner').classList.add('hidden');
         setTimeout(() => {
-          window.location.href = 'https://your-success-page-url.com';
+          // window.location.href = 'https://your-success-page-url.com';
         }, 2000);
       } catch (error) {
         document.getElementById('message').textContent = `There was a problem with the ${action} request`;
@@ -91,7 +91,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Guest Management</h1>
+    <h1>Processing your request</h1>
     <p id="message">Processing your request...</p>
     <div id="spinner"></div>
   </div>

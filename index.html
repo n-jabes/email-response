@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Processing Your Request</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <style>
       body {
         font-family: 'Poppins', sans-serif;
@@ -48,8 +54,12 @@
         margin: 0 auto;
       }
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
       .hidden {
         display: none;
@@ -79,6 +89,9 @@
           width: 30px;
           height: 30px;
         }
+        .container {
+          width: 70%;
+        }
       }
     </style>
     <script>
@@ -94,9 +107,14 @@
       // Function to handle AJAX requests
       async function handleResponse(action) {
         const { userIds } = getQueryParams();
-        const url = action === 'approve'
-          ? `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(userIds)}`
-          : `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(userIds)}`;
+        const url =
+          action === 'approve'
+            ? `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(
+                userIds
+              )}`
+            : `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(
+                userIds
+              )}`;
 
         try {
           const response = await fetch(url, { method: 'GET' });
@@ -104,10 +122,14 @@
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
-          document.getElementById('message').innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests have been ${action}d successfully`;
+          document.getElementById(
+            'message'
+          ).innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests have been ${action}d successfully`;
           document.getElementById('message').className = 'success';
         } catch (error) {
-          document.getElementById('message').innerHTML = `<i class="fas fa-times-circle error-icon"></i> There was a problem with the ${action} request`;
+          document.getElementById(
+            'message'
+          ).innerHTML = `<i class="fas fa-times-circle error-icon"></i> There was a problem with the ${action} request`;
           document.getElementById('message').className = 'error';
           console.error('Error:', error);
         }
@@ -120,7 +142,9 @@
         if (action) {
           handleResponse(action);
         } else {
-          document.getElementById('message').innerHTML = `<i class="fas fa-times-circle error-icon"></i> Invalid request`;
+          document.getElementById(
+            'message'
+          ).innerHTML = `<i class="fas fa-times-circle error-icon"></i> Invalid request`;
           document.getElementById('message').className = 'error';
           document.getElementById('spinner').classList.add('hidden');
         }

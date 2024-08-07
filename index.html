@@ -22,10 +22,16 @@
         background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
       }
       #message {
         margin-bottom: 20px;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 500;
         display: flex;
         align-items: center;
@@ -62,6 +68,18 @@
         color: #dc3545;
         font-size: 24px;
       }
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 20px;
+        }
+        #message {
+          font-size: 12px;
+        }
+        #spinner {
+          width: 30px;
+          height: 30px;
+        }
+      }
     </style>
     <script>
       // Function to get query parameters
@@ -86,7 +104,7 @@
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
-          document.getElementById('message').innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests ${action}d successfully`;
+          document.getElementById('message').innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests have been ${action}d successfully`;
           document.getElementById('message').className = 'success';
         } catch (error) {
           document.getElementById('message').innerHTML = `<i class="fas fa-times-circle error-icon"></i> There was a problem with the ${action} request`;

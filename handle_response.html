@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing Your Request</title>
+  <script>
+    // Function to get query parameters
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        userIds: params.get('userIds'),
+        ids: params.get('ids'),
+        action: params.get('action') // Use this to determine whether it's approve or decline
+      };
+    }
+
+    // Function to handle AJAX requests
+    function handleResponse(action) {
+      const { userIds, ids } = getQueryParams();
+      const url = action === 'approve' 
+        ? `https://your-api-url.com/users/approve-guests?userIds=${encodeURIComponent(userIds)}`
+        : `https://your-api-url.com/users/updateStatus-batch/decline?ids=${encodeURIComponent(ids)}`;
+      
+      fetch(url, { method: 'PUT' })
+        .then(response => response.json())
+        .then(data => {
+          alert(`Guests ${action}d successfully`);
+          // Optionally, redirect or update the page content
+          window.location.href = 'https://your-success-page-url.com';
+        })
+        .catch(error => {
+          alert(`There was a problem with the ${action} request`);
+          console.error('Error:', error);
+        });
+    }
+
+    // Run on page load
+    window.onload = () => {
+      const { action } = getQueryParams();
+      if (action) {
+        handleResponse(action);
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Processing your request...</p>
+</body>
+</html>

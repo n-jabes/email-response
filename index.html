@@ -67,6 +67,9 @@
       .success {
         color: #28a745;
       }
+      .declined {
+        color: #4069b0;
+      }
       .error {
         color: #dc3545;
       }
@@ -107,14 +110,19 @@
       // Function to handle AJAX requests
       async function handleResponse(action) {
         const { userIds } = getQueryParams();
-        const url =
-          action === 'approve'
-            ? `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(
-                userIds
-              )}`
-            : `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(
-                userIds
-              )}`;
+        let url;
+
+        // console.log('action: ', action)
+
+        if (action === 'approve') {
+          url = `https://cafeteria-konnect-backend.onrender.com/users/approve-guests-proxy?userIds=${encodeURIComponent(
+            userIds
+          )}`;
+        } else if (action === 'decline') {
+          url = `https://cafeteria-konnect-backend.onrender.com/users/decline-guests-proxy?userIds=${encodeURIComponent(
+            userIds
+          )}`;
+        }
 
         try {
           const response = await fetch(url, { method: 'GET' });
@@ -122,10 +130,16 @@
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
+
           document.getElementById(
             'message'
-          ).innerHTML = `<i class="fas fa-check-circle success-icon"></i> Guests have been ${action}d successfully`;
-          document.getElementById('message').className = 'success';
+          ).innerHTML = `<i  successclass="fas fa-check-circle-icon"></i> Guests have been ${action}d successfully`;
+
+          if (action === 'approve') {
+            document.getElementById('message').className = 'success';
+          } else if (action === 'decline') {
+            document.getElementById('message').className = 'declined';
+          }
         } catch (error) {
           document.getElementById(
             'message'
